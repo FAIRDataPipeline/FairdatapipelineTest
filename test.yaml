@@ -2,5 +2,5 @@ run_metadata:
   default_input_namespace: testing
   description: SEIRS Model julia
   script: |
-    python -c print('hello')
+    python -c "print('hello')"
     python -c "import sys; sys.exit(1)" 
