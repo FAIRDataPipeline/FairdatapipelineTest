@@ -11,7 +11,7 @@ on:
 
 jobs:
   tests:
-    name: (Python ${{ matrix.python }})
+    name: ${{ matrix.os }} (Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -40,5 +40,5 @@ jobs:
         fair registry install
         fair registry start
         fair init --ci --local
-        fair run --debug --dirty -local test.yaml
+        fair run --debug --dirty --local test.yaml
       shell: bash
