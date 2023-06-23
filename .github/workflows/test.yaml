@@ -42,3 +42,40 @@ jobs:
         fair init --ci --local
         fair run --debug --dirty --local test.yaml
       shell: bash
+
+  tests_venv:
+    name: ${{ matrix.os }} (Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        python: ["3.8", "3.9", "3.10", "3.11"]
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+        arch:
+          - x64
+        experimental:
+          - false
+      fail-fast: false
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Set up python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python }}
+        architecture: 'x64'
+    - name: Initialise and run fair-cli
+      run: |
+        python -m venv venv
+        source venv/${ACTIVATE_DIR}/activate
+        pip install fair-cli
+        fair registry install
+        fair registry start
+        fair init --ci --local
+        fair run --debug --dirty --local test.yaml
+      shell: bash
+      env:
+        ACTIVATE_DIR: ${{ runner.os == 'Windows' && 'Scripts' || 'bin' }}
